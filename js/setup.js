@@ -1,6 +1,5 @@
 "use strict";
 
-
 var FNAMES = [
   "Иван",
   "Хуан Себастьян",
@@ -46,7 +45,6 @@ var getRandomElement = function(arr) {
   return arr[Math.floor(Math.random() * (arr.length))];
 };
 var createWizard = function(fnames, lnames, coatColors, eyesColors) {
-  debugger;
   var wizard = {};
   wizard.name = getRandomElement(fnames) + " " + getRandomElement(lnames);
   wizard.coatColor = getRandomElement(coatColors);
@@ -84,3 +82,74 @@ wizardsArr.forEach(function(wizardObj) {
 setupList.appendChild(fragment);
 
 setupSimilar.classList.remove("hidden");
+
+// Event listeners
+
+var setup = document.querySelector(".setup");
+var setupOpen = document.querySelector(".setup-open");
+var setupClose = setup.querySelector(".setup-close");
+
+var onPopupEscPress = function(evt) {
+  if (evt.keyCode === 27) {
+    setup.classList.remove("hidden");
+    evt.preventDefault();
+    popupClose();
+  }
+};
+
+var popupOpen = function() {
+  setup.classList.remove("hidden");
+  document.addEventListener('keydown', onPopupEscPress);
+};
+
+var popupClose = function() {
+  setup.classList.add("hidden");
+  document.removeEventListener('keydown', onPopupEscPress);
+};
+
+
+setupOpen.addEventListener("click", function(evt) {
+  popupOpen();
+});
+
+setupOpen.addEventListener("keydown", function(evt) {
+  if (evt.keyCode === 27) {
+    setup.classList.remove("hidden");
+  }
+});
+
+setupClose.addEventListener("click", function(evt) {
+  popupClose();
+});
+
+setupClose.addEventListener("keydown", function(evt) {
+  if (evt.keyCode === 27) {
+    setup.classList.add("hidden");
+  }
+});
+
+// colors event listeners
+
+var wizardCoat = document.querySelector(".setup-wizard .wizard-coat");
+var wizardEyes = document.querySelector(".setup-wizard .wizard-eyes");
+var wizardFireball = document.querySelector(".setup-fireball-wrap");
+var FIREBALL_COLORS = [
+"#ee4830",
+"#30a8ee",
+"#5ce6c0",
+"#e848d5",
+"#e6e848"
+];
+
+wizardCoat.addEventListener("click", function(evt) {
+  evt.currentTarget.style.fill = getRandomElement(COAT_COLORS);
+});
+wizardEyes.addEventListener("click", function(evt) {
+  evt.currentTarget.style.fill = getRandomElement(EYES_COLORS);
+});
+wizardFireball.addEventListener("click", function(evt) {
+  var color = getRandomElement(FIREBALL_COLORS);
+  evt.currentTarget.style.backgroundColor = color;
+  wizardFireball.querySelector("input[name=fireball-color").value = color;
+
+});
